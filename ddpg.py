@@ -15,7 +15,7 @@ GAMMA = 0.99             # discount factor
 TAU = 1e-3               # for soft update of target parameters
 LR_ACTOR = 1e-3          # learning rate (Actor)
 LR_CRITIC = 1e-4         # learning rate (Critic)
-L2_WEIGHT_DECAY = 10e-2  # L2 Weight Decay from Paper
+L2_WEIGHT_DECAY = 0      # L2 Weight Decay from Paper
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
