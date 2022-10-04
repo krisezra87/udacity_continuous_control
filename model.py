@@ -43,7 +43,7 @@ class Actor(nn.Module):
         """ Create the policy network that maps states to actions """
         x = F.relu(self.net1(state))
         x = F.relu(self.net2(x))
-        x = F.tanh(self.net3(x))
+        x = torch.tanh(self.net3(x))
         return x
 
 

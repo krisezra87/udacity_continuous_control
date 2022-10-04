@@ -225,6 +225,6 @@ class OUProcess(object):
 
     def get_sample(self):
         dx = self.theta * (self.mu - self.state) + \
-            self.sigma * np.random.rand(self.state.shape)
+            self.sigma * np.random.rand(self.state.shape[0])
         self.state += dx
         return self.state

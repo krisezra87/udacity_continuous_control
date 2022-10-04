@@ -63,13 +63,12 @@ def ddpg(n_episodes=500, max_t=1000):
                 break
         scores_window.append(score)       # save most recent score
         scores.append(score)              # save most recent score
-        print(
-                '\rEpisode {}\tAverage Score: {:.2f}'.format(
-                    i_episode, np.mean(scores_window)), end="")
-        if i_episode % 100 == 0:
+
+        if i_episode % 10 == 0:
             print(
                     '\rEpisode {}\tAverage Score: {:.2f}'.format(
                         i_episode, np.mean(scores_window)))
+
         if np.mean(scores_window) >= 30:
             print(
                     '\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(
