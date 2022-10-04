@@ -10,11 +10,11 @@ import torch.nn.functional as F
 from torch import optim as optim
 
 BUFFER_SIZE = int(1e5)   # replay buffer size
-BATCH_SIZE = 64          # minibatch size
+BATCH_SIZE = 128         # minibatch size
 GAMMA = 0.99             # discount factor
 TAU = 1e-3               # for soft update of target parameters
-LR_ACTOR = 5e-4          # learning rate (Actor)
-LR_CRITIC = 5e-4         # learning rate (Critic)
+LR_ACTOR = 1e-3          # learning rate (Actor)
+LR_CRITIC = 1e-4         # learning rate (Critic)
 L2_WEIGHT_DECAY = 10e-2  # L2 Weight Decay from Paper
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -58,7 +58,7 @@ class Agent():
         # Set up the noise
         self.noise = OUProcess(action_size, seed)
 
-        if checkpoints:
+        if checkpoints is not None:
             actor = torch.load(checkpoints[0])
             critic = torch.load(checkpoints[1])
 
@@ -120,9 +120,9 @@ class Agent():
         q_targets_next = self.critic_target(next_states, next_actions)
 
         # Compute the q targets, but not for episodes that complete
-        q_targets = rewards + (gamma * q_targets_next * 1 - dones)
-        q_expected = self.critic_local(states,actions)
-        loss = F.mse_loss(q_expected,q_targets)
+        q_targets = rewards + (gamma * q_targets_next * (1 - dones))
+        q_expected = self.critic_local(states, actions)
+        loss = F.mse_loss(q_expected, q_targets)
 
         # use the optimizer with gradient info to minimize the loss going
         # forward
@@ -130,10 +130,11 @@ class Agent():
         loss.backward()
         self.critic_optimizer.step()
 
-        ## Use the critic update information to update the actor
-
+        # Use the critic update information to update the actor
         predicted_actions = self.actor_local(states)
-        # Note the negative sign here.  This isn't a minimization problem, we are actually trying to maximize the return value here so we need to use the negative.
+        # Note the negative sign here.  This isn't a minimization problem, we
+        # are actually trying to maximize the return value here so we need to
+        # use the negative.
         loss = -self.critic_local(states, predicted_actions).mean()
         self.actor_optimizer.zero_grad()
         loss.backward()
@@ -206,7 +207,7 @@ class ReplayBuffer:
 
 class OUProcess(object):
 
-    """Docstring for OUProcess(object). """
+    """ Add noise according to Ornstein-Uhlenbeck Process """
 
     def __init__(self, action_size, seed, mu=0., theta=0.15, sigma=0.1):
         """Set up the noise process parameters"""

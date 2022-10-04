@@ -19,12 +19,9 @@ env = UnityEnvironment(file_name="Reacher_Linux/Reacher.x86_64")
 brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
 
-# Grab the environment info as well to set up the agent
-env_info = env.reset(train_mode=True)[brain_name]
-
 # Set up the agent generically for state and action sizes.  Can't ever be TOO
 # portable!
-agent = Agent(state_size=len(env_info.vector_observations[0]),
+agent = Agent(state_size=brain.vector_observation_space_size,
               action_size=brain.vector_action_space_size, seed=0)
 
 
@@ -46,6 +43,9 @@ def ddpg(n_episodes=500, max_t=1000):
 
         # Get the initial state from the environment
         state = env_info.vector_observations[0]
+
+        # Get the agent ready for this new episode
+        agent.reset()
 
         # Initialize the score to zero
         score = 0
