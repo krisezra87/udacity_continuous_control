@@ -5,8 +5,7 @@ import torch.nn.functional as F
 import numpy as np
 
 def set_limits(layer):
-    fan_in = layer.weight.data.size()[0]
-    lim = 1. / np.sqrt(fan_in)
+    lim = 1. / np.sqrt(layer.weight.data.size()[0])
     return (-lim, lim)
 
 
@@ -25,7 +24,7 @@ class Actor(nn.Module):
         # Define the number of nodes in the network here.  Not changing
         # and keeps the signature simple
         net1_nodes = 128
-        net2_nodes = 128
+        net2_nodes = 256
 
         super(Actor, self).__init__()
         self.seed = torch.manual_seed(seed)
@@ -62,7 +61,7 @@ class Critic(nn.Module):
         # Define the number of nodes in the network here.  Not changing
         # and keeps the signature simple
         net1_nodes = 128
-        net2_nodes = 128
+        net2_nodes = 256
 
         super(Critic, self).__init__()
         self.seed = torch.manual_seed(seed)

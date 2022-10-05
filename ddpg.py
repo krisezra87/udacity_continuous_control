@@ -209,14 +209,13 @@ class OUProcess(object):
 
     """ Add noise according to Ornstein-Uhlenbeck Process """
 
-    def __init__(self, action_size, seed, mu=0., theta=0.15, sigma=0.1):
+    def __init__(self, action_size, seed, mu=0., theta=0.15, sigma=0.06):
         """Set up the noise process parameters"""
         self.mu = mu * np.ones(action_size)
-        self.state = self.mu
+        self.state = copy(self.mu)
         self.theta = theta
         self.sigma = sigma
         self.seed = random.seed(seed)
-        self.reset()
 
     def reset(self):
         """ Reset the internal noise to the original mean of mu """
@@ -226,6 +225,6 @@ class OUProcess(object):
 
     def get_sample(self):
         dx = self.theta * (self.mu - self.state) + \
-            self.sigma * np.random.rand(self.state.shape[0])
+            self.sigma * np.random.randn(self.state.shape[0])
         self.state += dx
         return self.state

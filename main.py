@@ -26,7 +26,7 @@ agent = Agent(state_size=brain.vector_observation_space_size,
 
 
 # Train the agent
-def ddpg(n_episodes=500, max_t=1000):
+def ddpg(n_episodes=400, max_t=1200):
     """ Deep Deterministic Policy Gradient (DDPG)
 
     Params
