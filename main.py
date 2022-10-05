@@ -12,7 +12,6 @@ from ddpg import Agent
 
 # First configure the environment
 # NOTE: I have configured for LINUX x86_64
-# Hey UDACITY, PLEASE COMPILE A HEADLESS OPTION
 env = UnityEnvironment(file_name="Reacher_Linux/Reacher.x86_64")
 
 # get the default brain

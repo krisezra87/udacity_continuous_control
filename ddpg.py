@@ -17,13 +17,14 @@ LR_ACTOR = 1e-3          # learning rate (Actor)
 LR_CRITIC = 1e-4         # learning rate (Critic)
 L2_WEIGHT_DECAY = 0      # L2 Weight Decay from Paper
 
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, seed, checkpoints=None):
+    def __init__(self, state_size, action_size, seed):
         """Initialize an Agent object.
 
         Params
@@ -58,23 +59,12 @@ class Agent():
         # Set up the noise
         self.noise = OUProcess(action_size, seed)
 
-        if checkpoints is not None:
-            actor = torch.load(checkpoints[0])
-            critic = torch.load(checkpoints[1])
-
-            # Configure both networks with the saved actor information
-            self.actor_local.load_state_dict(actor)
-            self.actor_target.load_state_dict(actor)
-
-            # And also set up the critic
-            self.critic_local.load_state_dict(critic)
-            self.critic_target.load_state_dict(critic)
-
     def step(self, state, action, reward, next_state, done):
         # Save experience in replay memory
         self.memory.add(state, action, reward, next_state, done)
 
-        # If enough samples are available in memory, get random subset and learn
+        # If enough samples are available in memory, get random subset and
+        # learn
         if len(self.memory) > BATCH_SIZE:
             experiences = self.memory.sample()
             self.learn(experiences, GAMMA)
